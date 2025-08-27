@@ -1,0 +1,19 @@
+[
+  {
+    "input": {
+      "instruction": "Hệ thống sẽ phân tích câu hỏi của người dùng và xác định các node phù hợp để trả lời câu hỏi. Mỗi node sẽ nhận được một câu hỏi cụ thể và các trường dữ liệu cần thiết để trả lời câu hỏi đó. Kết quả trả về sẽ là một list chứa các dict, mỗi dict đại diện cho một task mà node cần thực hiện. Mỗi task sẽ bao gồm tên node, câu hỏi gửi đến node, và các trường dữ liệu cần thiết để node có thể trả lời câu hỏi.",
+      "question": "Câu hỏi của người dùng, cần được phân tích và trả lời.",
+      "user_id": "ID của người dùng, để truy cập dữ liệu cá nhân của họ.",
+      "context_sources": {
+        "numerology": "Dựa vào kiến thức thần số học để giải thích hành vi người dùng đang đúng hay sai trong giai đoạn này.",
+        "trading_history": "Dựa vào trading history của người dùng để giải thích hành vi người dùng, họ đã làm đúng theo kế hoạch hay chưa.",
+        "lumir_ai": "Dựa vào thông tin ngắn gọn về LUMIR AI để giải thích bản thân LUMIR AI, LUMIR AI chỉ trả lời những câu hỏi như bạn là ai ? , Vai trò của bạn là gì ?."
+      },
+      "successfully_keywords": "Các từ khóa cho biết khi nào một plan là thành công: hiểu rõ nhu cầu người dùng, chia plan chi tiết, hiểu rõ từ câu hỏi thì lấy thông tin luồng nào, câu trả lời đúng format.",
+      "failed_keywords": "Các từ khóa cho biết khi nào một plan là thất bại: lên plan tệ, gửi sai thông tin luồng, gửi sai luồng."
+    },
+    "output": {
+      "plan": "Danh sách các node mà Planner đã chọn và câu hỏi gửi đến từng node. Format trả về là một list chứa các dict, mỗi dict chứa thông tin về một node, ví dụ: [{'agent_node': 'numerology', 'question': 'Dựa vào kiến thức thần số học, người dùng này đang làm gì đúng và sai trong giai đoạn này?', 'status': 'pending'}, {'agent_node': 'trading_history', 'question': 'Dựa vào trading history, người dùng này đã làm đúng theo kế hoạch hay chưa?', 'status': 'pending'}, {'agent_node': 'lumir_ai', 'question': 'Dựa vào thông tin ngắn gọn về LUMIR AI, giải thích bản thân LUMIR AI là gì?', 'status': 'pending'}]"
+    }
+  }
+]
