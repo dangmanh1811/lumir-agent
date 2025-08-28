@@ -36,7 +36,7 @@ def get_trading_context_from_analysis(analysis_result: Dict) -> str:
     """Generate context sources for execute_agent based on analysis results"""
     
     # Get trading data analysis result
-    trading_result = analyze_trading_excel("/home/chaos/Documents/chaos/repo/lumir-agent/docs/test_sample.xlsx")
+    trading_result = analyze_trading_excel("./docs/test_sample.xlsx")
     
     # Suppress the print output from analyze_trading_excel
     import os
@@ -46,7 +46,7 @@ def get_trading_context_from_analysis(analysis_result: Dict) -> str:
     # Redirect stdout and stderr to null
     with open(os.devnull, 'w') as devnull:
         with redirect_stdout(devnull), redirect_stderr(devnull):
-            trading_result = analyze_trading_excel("/home/chaos/Documents/chaos/repo/lumir-agent/docs/test_sample.xlsx")
+            trading_result = analyze_trading_excel("./docs/test_sample.xlsx")
     
     if not trading_result.get("success"):
         return "Cannot retrieve trading data"
@@ -111,10 +111,11 @@ def test_trading_workflow():
     
     try:
         # Step 1: Initialize the NodeAgentLoader for trading
-        agent_node = NodeAgentLoader(config_path='config/agent_node/trading.json')
+        agent_node = NodeAgentLoader(config_path='config/agent_node/trading_v2.json')
         
         # Step 2: Test analyze_agent
-        test_question = "Phan tich hieu suat giao dich cua toi trong thoi gian qua"
+        # test_question = "Phan tich hieu suat giao dich cua toi trong thoi gian qua"
+        test_question = "Hãy phân tích hiệu suất giao dịch của tôi trong thời gian qua và hãy đưa cho tôi một vào cách để có thể tăng hiệu suất giao dịch, để tôi có thể lời vãi cả lều"
         
         analyze_input = {
             'users_question': test_question,
@@ -126,9 +127,14 @@ def test_trading_workflow():
         analyze_result = agent_node.analyze_agent(analyze_input)
         analyze_data = extract_output_json(analyze_result)
         
+        print(analyze_data)
+        # quit()
+
         # Step 3: Generate context and test execute_agent
         trading_context = get_trading_context_from_analysis(analyze_data)
-        
+        print(trading_context)
+        # quit()
+
         execute_input = {
             'users_question': test_question,
             'user_id': 'test_user_001',

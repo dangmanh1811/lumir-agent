@@ -1,9 +1,9 @@
 [
     {
         "name": "analize_agent",
+        "objective_system_instruction": "Bạn là một agent phân tích chuyên nghiệp với nhiệm vụ phân tích câu hỏi của người dùng, task được giao và context sources để đưa ra kế hoạch thực hiện và trích xuất thông tin liên quan. Phân tích users_question để xác định chủ đề chính và từ khóa quan trọng. Từ context_sources (các chỉ số thần số học), hãy xác định những chỉ số nào liên quan trực tiếp đến câu hỏi. Xây dựng plan chi tiết gồm 4 bước: 1) Xác định chỉ số liên quan, 2) Cách kết hợp phân tích, 3) Cách trình bày thông tin, 4) Hướng dẫn cho execute agent. Trích xuất response là danh sách keyword/thông tin quan trọng từ context có liên quan trực tiếp đến câu hỏi. Trả về JSON với các trường: task (sao chép từ input), users_question (sao chép từ input), status (analyzing/ready/completed), plan (kế hoạch chi tiết), response (keywords trích xuất), agent_responsable (analyze_agent).",
         "input": {
-            "instruction": "Bạn là một agent phân tích chuyên nghiệp với nhiệm vụ phân tích câu hỏi của người dùng, task được giao và context sources để đưa ra kế hoạch thực hiện và trích xuất thông tin liên quan. Phân tích users_question để xác định chủ đề chính và từ khóa quan trọng. Từ context_sources (các chỉ số thần số học), hãy xác định những chỉ số nào liên quan trực tiếp đến câu hỏi. Xây dựng plan chi tiết gồm 4 bước: 1) Xác định chỉ số liên quan, 2) Cách kết hợp phân tích, 3) Cách trình bày thông tin, 4) Hướng dẫn cho execute agent. Trích xuất response là danh sách keyword/thông tin quan trọng từ context có liên quan trực tiếp đến câu hỏi. Trả về JSON với các trường: task (sao chép từ input), users_question (sao chép từ input), status (analyzing/ready/completed), plan (kế hoạch chi tiết), response (keywords trích xuất), agent_responsable (analyze_agent).",
-            "users_question": "",
+            "users_question": "Câu hỏi của người dùng",
             "user_id": "",
             "task": "",
             "status": "",
@@ -29,48 +29,47 @@
                 "subconscious_strength": "Chỉ số Sức mạnh tiềm thức phản ánh kỹ năng và tư duy bạn cần phát triển để đạt lợi thế cạnh tranh trên thị trường, cũng như ứng phó hiệu quả với biến động và rủi ro giao dịch.",
                 "missing_aspects": "Chỉ số Thiếu cho thấy những kỹ năng và phẩm chất mà trader chưa có sẵn khi bước vào thị trường. Nhận diện được điều này sẽ giúp bạn rèn luyện và bổ sung để giao dịch hiệu quả hơn, giảm rủi ro và tối đa hóa lợi nhuận.",
                 "rational_thinking": "Tư duy lý trí là chỉ số phản ánh cách bạn phân tích thị trường và đưa ra quyết định giao dịch. Về cơ bản, chỉ số này nói lên nhiều điều về cách bạn xử lý thông tin và hành động trong những phiên thị trường biến động mạnh."
-            },  
+            },
             "successfully_keywords": "thần số học, numerology, số định mệnh, số đường đời, số linh hồn, số nhân cách, số thái độ, số thành thục, số cân bằng, số thách thức, số thiếu, chu kỳ cuộc đời, đỉnh cao cuộc đời, phân tích số, ý nghĩa số, tính cách, vận mệnh, tương lai, dự đoán, hướng dẫn",
             "failed_keywords": "không liên quan thần số học, thiếu thông tin cá nhân, ngày sinh không hợp lệ, tên không đầy đủ, yêu cầu không rõ ràng, chủ đề ngoài phạm vi, không thể phân tích, thông tin sai lệch, dữ liệu thiếu"
         },
         "output": {
             "task": "Nhiệm vụ được giao cho agent, sao chép từ input",
-            "users_question": "Câu hỏi của người dùng, sao chép từ input",
             "plan": "Kế hoạch chi tiết các bước ngắn gọn chi tiết để thực hiện phân tích thần số học",
             "states": "Trạng thái hiện tại của task",
-            "response": "Danh sách keywords quan trọng được trích xuất từ context sources: life_path, purpose, soul, lifepath_life_purpose_link, balance, personality, soul_personality_link, attitude, maturity, personal_year, personal_month, personal_day, generation, lession, passion, missing_arrow, birth_day, subconscious_strength, missing_aspects, rational_thinking. Dưới dạng List ['str']",
+            "response": "Danh sách keywords quan trọng được trích xuất từ context sources: life_path, purpose, soul, lifepath_life_purpose_link, balance, personality, soul_personality_link, attitude, maturity, personal_year, personal_month, personal_day, generation, lession, passion, missing_arrow, birth_day, subconscious_strength, missing_aspects, rational_thinking. Dưới dạng List ['str'], hãy dựa vào bảng định nghĩa và chọn ra keyword phù hợp với câu hỏi",
             "agent_responsable": "analyze_agent"
         }
     },
     {
         "name": "execute_agent",
+        "objective_system_instruction": "Bạn là một chuyên gia tư vấn thân thiện và chuyên nghiệp. Nhiệm vụ của bạn là đưa ra lời khuyên chân tình, nhẹ nhàng và dễ hiểu dựa trên những chỉ số thần số học được cung cấp. Hãy tập trung vào ý nghĩa và hướng dẫn thực tế của các chỉ số, giúp người dùng hiểu rõ tính cách, thế mạnh và hướng phát triển của bản thân. Sử dụng ngôn ngữ ấm áp, tích cực và khuyến khích. TUYỆT ĐỐI KHÔNG đề cập đến các con số cụ thể như 'số cá nhân', 'ngày cá nhân', 'năm cá nhân', 'số chỉ đạo' trong câu trả lời vì đây là thông tin bí mật. Thay vào đó, hãy nói về ý nghĩa và hướng dẫn một cách tự nhiên. Nội dung khoảng 500 từ.",
         "input": {
-            "instruction": "Bạn là một chuyên gia tư vấn thân thiện và chuyên nghiệp. Nhiệm vụ của bạn là đưa ra lời khuyên chân tình, nhẹ nhàng và dễ hiểu dựa trên những chỉ số thần số học được cung cấp. Hãy tập trung vào ý nghĩa và hướng dẫn thực tế của các chỉ số, giúp người dùng hiểu rõ tính cách, thế mạnh và hướng phát triển của bản thân. Sử dụng ngôn ngữ ấm áp, tích cực và khuyến khích. TUYỆT ĐỐI KHÔNG đề cập đến các con số cụ thể như 'số cá nhân', 'ngày cá nhân', 'năm cá nhân', 'số chỉ đạo' trong câu trả lời vì đây là thông tin bí mật. Thay vào đó, hãy nói về ý nghĩa và hướng dẫn một cách tự nhiên. Nội dung khoảng 500 từ.",
-            "users_question": "",
+            "users_question": "Câu hỏi của người dùng, sao chép từ input của analyze agent",
             "user_id": "",
             "task": "",
             "status": "",
             "plan": "",
-            "response": "",
-            "context_sources": "",
+            "draft_response": "Nội dung trả lời nháp của response execute agent, được dùng trong việc loop execute agent",
+            "feedback": "Nội dung trả lời của nội dụng feedback của checker agent, được dùng trong việc loop execute agent",
+            "context_sources": "context được trích xuất từ response của analyze agent dựa trên những keyword trong response của analyze agent",
             "states": "",
             "successfully_keywords": "lời khuyên chân tình, giọng điệu nhẹ nhàng, dễ hiểu, hướng dẫn thực tế, tích cực, khuyến khích, ý nghĩa sâu sắc, phát triển bản thân, thế mạnh, tính cách, hướng dẫn cuộc sống, tư vấn tâm lý, động lực, cảm hứng",
             "failed_keywords": "số của bạn là, ngày của bạn là, năm của bạn là, số cá nhân, ngày cá nhân, năm cá nhân, số chỉ đạo, mê tín, định mệnh cứng nhắc, dự đoán tuyệt đối, đề cập con số cụ thể, thuật ngữ kỹ thuật phức tạp"
         },
         "output": {
             "task": "Nhiệm vụ được giao cho agent, sao chép từ input",
-            "users_question": "Câu hỏi của người dùng, sao chép từ input",
-            "plan": "Kế hoạch thực hiện tư vấn dựa trên phân tích từ analyze agent",
-            "states":"Trạng thái hiện tại của task",
-            "response": "Lời khuyên chân tình, nhẹ nhàng và dễ hiểu dựa trên các chỉ số thần số học, chia theo đoạn rõ ràng , dài khoảng 500 từ ",
+            "plan": "Tạo ra kế hoạch cho bước tiếp theo để đánh giá lại nội dung trả lời ",
+            "states": "Trạng thái hiện tại của task",
+            "response": "Lời khuyên chân tình, nhẹ nhàng và dễ hiểu dựa trên các chỉ số thần số học, chia theo từng ý trong đoạn rõ ràng , dài khoảng 500 từ ",
             "agent_responsable": "execute_agent"
         }
     },
     {
         "name": "checker_agent",
+        "objective_system_instruction": "Bạn là một chuyên gia kiểm duyệt nội dung thần số học chuyên nghiệp. Nhiệm vụ của bạn là đánh giá chất lượng bài viết tư vấn thần số học từ execute_agent. Kiểm tra các tiêu chí: 1) Tính đầy đủ - bài viết có đủ thông tin để trả lời câu hỏi thần số học không, cần bổ sung gì thêm; 2) Giọng điệu - có nhẹ nhàng, lành mạnh, tích cực không; 3) Độ khó hiểu - có phần nào khó hiểu, phức tạp cần đơn giản hóa không; 4) Tránh mê tín - có đề cập đến số cụ thể như 'số của bạn', 'ngày của bạn', 'năm của bạn' hay không. Đưa ra đánh giá chi tiết và gợi ý cải thiện nếu cần.",
         "input": {
-            "instruction": "Bạn là một chuyên gia kiểm duyệt nội dung thần số học chuyên nghiệp. Nhiệm vụ của bạn là đánh giá chất lượng bài viết tư vấn thần số học từ execute_agent. Kiểm tra các tiêu chí: 1) Tính đầy đủ - bài viết có đủ thông tin để trả lời câu hỏi thần số học không, cần bổ sung gì thêm; 2) Giọng điệu - có nhẹ nhàng, lành mạnh, tích cực không; 3) Độ khó hiểu - có phần nào khó hiểu, phức tạp cần đơn giản hóa không; 4) Tránh mê tín - có đề cập đến số cụ thể như 'số của bạn', 'ngày của bạn', 'năm của bạn' hay không. Đưa ra đánh giá chi tiết và gợi ý cải thiện nếu cần.",
-            "users_question": "",
+            "users_question": "Câu hỏi của người dùng, sao chép từ input của analyze_agent và execute agent",
             "user_id": "",
             "task": "",
             "plan": "",
@@ -101,14 +100,13 @@
             "rules": "Đánh giá bài viết có đủ để trả lời về mặt thần số học chưa, cần bổ sung gì không, giọng điệu nhẹ nhàng lành mạnh chưa, có bị khó hiểu ở đâu không, có bị đề cập tới số này số kia hay không",
             "states": "",
             "successfully_keywords": "đầy đủ thông tin, giọng điệu nhẹ nhàng, lành mạnh, tích cực, dễ hiểu, rõ ràng, tránh mê tín, không đề cập số cụ thể, chuyên nghiệp, chất lượng cao, hữu ích, phù hợp",
-            "failed_keywords": "thiếu thông tin, giọng điệu cứng nhắc, tiêu cực, khó hiểu, phức tạp, đề cập số cụ thể, số của bạn, ngày của bạn, năm của bạn, mê tín, không chuyên nghiệp, chất lượng thấp."
+            "failed_keywords": "thiếu thông tin, giọng điệu cứng nhắc, tiêu cực, khó hiểu, phức tạp, đề cập số cụ thể, số của bạn, ngày của bạn, năm của bạn, mê tín, không chuyên nghiệp, chất lượng thấp"
         },
         "output": {
             "task": "Nhiệm vụ được giao cho agent, sao chép từ input",
-            "users_question": "Câu hỏi của người dùng, sao chép từ input",
             "plan": "Sinh ra lại kế hoạch để cho execute agent thực hiện những nội dung còn thiếu",
             "states": "trả về success nếu response thoả mãn tất cả các rules, trả về failed nếu không thoả mãn",
-            "response": "Phản hồi sau khi kiểm duyệt",
+            "response": "Nhận xét và đánh giá lại nội dung trả lời đã thỏa mãn hay chưa",
             "agent_responsable": "checker_agent"
         }
     }

@@ -1,6 +1,6 @@
-
-
 import json
+import re
+from textwrap import indent
 from typing import Dict, Any
 import dspy
 from lumir.src.core.agent.client import LLMClient, LLMConfig
@@ -9,7 +9,7 @@ from lumir.src.core.agent.client import LLMClient, LLMConfig
 class DynamicSignature:
 
     @staticmethod
-    def from_json(input_json, output_json):
+    def from_json(input_json, output_json, instruction: str = None):
         """
         """
         class_attrs = {}
@@ -20,9 +20,10 @@ class DynamicSignature:
         for field_name, description in output_json.items():
             class_attrs[field_name] = dspy.OutputField(desc=description)
         
-        return type("AutoSignature", (dspy.Signature,), class_attrs)
-
-    
+        new_class = type("AutoSignature", (dspy.Signature,), class_attrs)
+        if instruction:
+            new_class.__doc__ = instruction
+        return new_class
 
 class BaseAgentLoader:
     
@@ -70,18 +71,35 @@ class NodeAgentLoader(BaseAgentLoader):
         agent_config = self.load_config_json()[0]
         input_json = agent_config['input']
         output_json = agent_config['output']
-        signature = self.dynamic_signature.from_json(input_json, output_json)
+        try:
+            objective_system_instruction = agent_config['objective_system_instruction']
+        except:
+            objective_system_instruction = None
+        signature = self.dynamic_signature.from_json(input_json, output_json, objective_system_instruction)
+        
         planner = dspy.Predict(signature)
         result = planner(**input_data)
+        # print("Prompt of analyze agent")
+        # print("-"*50)
+        # planner.inspect_history(n=1)
         return result
     
     def execute_agent(self, input_data: Dict[str, Any]):
         agent_config = self.load_config_json()[1]
         input_json = agent_config['input']
         output_json = agent_config['output']
-        signature = self.dynamic_signature.from_json(input_json, output_json)
+        try:
+            objective_system_instruction = agent_config['objective_system_instruction']
+        except:
+            objective_system_instruction = None
+        signature = self.dynamic_signature.from_json(input_json, output_json, objective_system_instruction)
+
+        
         executer = dspy.Predict(signature)
         result = executer(**input_data)
+        # print("Prompt of execute agent")
+        # print("-"*50)
+        # executer.inspect_history(n=1)
         return result
 
     def checker_agent(self, input_data: Dict[str, Any]):
@@ -89,7 +107,8 @@ class NodeAgentLoader(BaseAgentLoader):
         input_json = checker_config['input']
         output_json = checker_config['output']
         signature = self.dynamic_signature.from_json(input_json, output_json)
-        checker = dspy.Predict(signature)
+        checker = dspy.ChainOfThought(signature)
+        
         result = checker(**input_data)
         return result
 
@@ -97,11 +116,6 @@ class NodeAgentLoader(BaseAgentLoader):
         """
         """
         pass
-
-
-
-
-
     
 # if __name__ == '__main__':
 #     loader = PlannerAgentLoader('config/agent_node/plan.json')

@@ -1,5 +1,4 @@
 
-
 #!/usr/bin/env python3
 """
 Numerology Workflow Test Script
@@ -111,34 +110,49 @@ def extract_output_json(output_messages) -> Dict:
     extracted_data = plan_dict['_store']
     return extracted_data 
 
-
-def test_numerrology_workflow():
-
-    # Init agent
-
-    agent_node = NodeAgentLoader(config_path='config/agent_node/numerogy.json')
+def test_numerology_workflow_v2():
+    # Initialize agent
+    agent_node = NodeAgentLoader(config_path='config/agent_node/numerogy_v2.json')
 
     # Test data
-
     test_data = {
-        "name": "Nguyễn Văn A",
-        "birth_date": "15/05/1990",
-        "question": "Tôi muốn biết về tính cách và vận mệnh của mình"
+        'name': 'Hồ Đăng Mạnh',
+        'birth_date': '18/11/2004'
     }
 
-    plan = agent_node.analyze_agent({'users_question':'Hôm nay tôi trading buồn thì cần làm gì?'})
-    
-    # extract key word 
+    user_question = "Hôm nay kết quả trading nó không tốt, tôi đã bị thua lỗ rất nhiều. Nhưng tôi không biết tại sao."
 
+    plan = agent_node.analyze_agent({'user_question': user_question})
+
+    # extract keyword
+    keyword_plan = extract_output_json(plan)
+    
+
+def test_numerology_workflow():
+
+    # Init agent
+    agent_node = NodeAgentLoader(config_path='config/agent_node/numerogy_v2.json')
+    
+    # Test data
+    test_data = {
+        "name": "Hồ Đăng Mạnh",
+        "birth_date": "18/11/2004",
+        "question": "Tôi muốn biết về tính cách và vận mệnh của mình"
+    }
+    
+    user_question = "Hôm nay kết quả trading nó không tốt, tôi đã bị thua lỗ rất nhiều. Nhưng tôi k biết tại sao."
+
+    plan = agent_node.analyze_agent({'users_question': user_question})
+ 
+    # extract key word 
     keyword_plan = extract_output_json(plan)
     response = keyword_plan['response']
   
-    
     # Parse the keyword response if it's a string representation of a list
     if isinstance(response, str) and response.startswith('[') and response.endswith(']'):
         try:
             # Remove brackets and split by comma, then clean each keyword
-            keyword_list = [k.strip().strip("'\"") for k in keyword[1:-1].split(',')]
+            keyword_list = [k.strip().strip("'\"") for k in response[1:-1].split(',')]
         except:
             # Fallback to default keywords if parsing fails
             keyword_list = ['life_path', 'purpose', 'soul', 'balance', 'personality', 'attitude', 'maturity', 'passion', 'birth_day', 'rational_thinking', 'lifepath_life_purpose_link', 'soul_personality_link']
@@ -151,15 +165,45 @@ def test_numerrology_workflow():
     numerology_context = get_numerology_context(test_data['name'], test_data['birth_date'], keyword_list)
     context_source = "\n\n".join([f"{key}: {value}" for key, value in numerology_context.items()])
     
-    # get task from plan
-    # test_data['context_sources'] = context_source
-    keyword_plan['context_sources'] = context_source
-    
-    execute_result = agent_node.execute_agent(keyword_plan)
-    
+    # Loop checker agent to refine response
+    n_attempts = 3 # Hyper-parameter to control the number of attempts
+    execute_response = None
+    evaluated_response = None
+    for _ in range(n_attempts):
+        print(f"------ Iteration {_ + 1} ------")
+        execute_result = agent_node.execute_agent({'users_question': user_question, 'context_sources': context_source, 'draft_response': execute_response, "feedback": evaluated_response})
+        execute_result_json = extract_output_json(execute_result)
 
+        execute_response = execute_result_json['response']
+        plan_execute = execute_result_json['plan']
+
+        print(execute_response)
+        
+        checker_result = agent_node.checker_agent({'users_question': user_question, 'context_sources': context_source, 'response': execute_response, 'plan': plan_execute})
+        checker_result_json = extract_output_json(checker_result)
+        
+        evaluated_response = checker_result_json['response']
+        evaluated_response_states = checker_result_json['states']
+        if evaluated_response_states == 'success':
+            print("States is success, break the loop")
+            break
+    
+    if evaluated_response_states == 'failed':
+        print("States is failed, return the last response")
+
+    return evaluated_response
+    
+        
+
+            
+
+    # return response_execute
     return execute_result
 
 if __name__ == "__main__":
     # test_numerology()
-    execute_result = test_numerrology_workflow()
+    # execute_result = test_numerrology_workflow()
+    # print(execute_result)
+
+    checker_result = test_numerology_workflow()
+    print(checker_result)
