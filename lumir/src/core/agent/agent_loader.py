@@ -134,65 +134,6 @@ class NodeAgentLoader(dspy.Module):
 
         return execute_response
 
-        
-class PlanEvaluator:
-    def __init__(self):
-        class Signature(dspy.Signature):
-            """Chuyên gia đánh giá việc tuân theo kế hoạch.
-            Chỉ tập trung đánh giá xem kế hoạch đã được thực hiện chính xác hay không.
-            
-            ĐÁNH GIÁ CHI TIẾT THEO THANG ĐIỂM 0-10:
-            - 0: Hoàn toàn không tuân theo kế hoạch
-            - 1: Rất ít nội dung phù hợp, chủ yếu không liên quan
-            - 2: Ít nội dung phù hợp, nhiều phần không liên quan  
-            - 3: Một vài điểm phù hợp nhưng thiếu nhiều chi tiết
-            - 4: Cơ bản đúng hướng nhưng thiếu nhiều nội dung quan trọng
-            - 5: Đủ ý chính nhưng thiếu chi tiết và cấu trúc
-            - 6: Có đầy đủ ý chính nhưng thiếu sâu và chi tiết
-            - 7: Đủ ý và chi tiết, nhưng thiếu một vài điểm nhỏ
-            - 8: Rất tốt, đầy đủ và chi tiết, chỉ thiếu rất ít chi tiết nhỏ
-            - 9: Xuất sắc, đầy đủ và chi tiết, rất sát kế hoạch
-            - 10: Hoàn hảo, tuân theo kế hoạch hoàn toàn chính xác
-            
-            Ví dụ:
-            - Kế hoạch: "Bước 1: Xác định mercado. Bước 2: Phân tích xu hướng. Bước 3: Quản lý rủi ro"
-            - Answer thiếu bước 3 → điểm 5-7
-            - Answer đúng cả 3 bước nhưng thiếu chi tiết → điểm 7-8
-            - Answer đúng cả 3 bước và đầy đủ chi tiết → điểm 9-10"""
-            question = dspy.InputField(desc="Câu hỏi gốc")
-            plan = dspy.InputField(desc="Kế hoạch trả lời chi tiết")
-            answer = dspy.InputField(desc="Câu trả lời đã thực hiện")
-            evaluation = dspy.OutputField(desc="Đánh giá chi tiết theo thang 0-10")
-            follow_plan = dspy.OutputField(desc="True nếu kế hoạch được tuân theo đầy đủ, False nếu không")
-            missing_steps = dspy.OutputField(desc="Các bước trong kế hoạch chưa được thực hiện")
-            score = dspy.OutputField(desc="Điểm đánh giá chính xác từ 0 đến 10")
-        self.evaluate = dspy.ChainOfThought(Signature)
-    
-    def run(self, question, plan, answer):
-        result = self.evaluate(question=question, plan=plan, answer=answer)
-        
-        # Fix score parsing - extract exact number from 0-10 range
-        score_value = 0
-        if isinstance(result.score, str):
-            # First try to match single digit 0-9
-            import re
-            numbers = re.findall(r'\b[0-9]\b', result.score)
-            if numbers:
-                score_value = int(numbers[0])
-            else:
-                # Then try to extract number from "0/10" format
-                numbers = re.findall(r'\d+', result.score)
-                if numbers:
-                    num = int(numbers[0])
-                    # Ensure number is in 0-10 range
-                    score_value = max(0, min(10, num))
-        
-        return {
-            "follow_plan": result.follow_plan.lower() == "true",
-            "score": score_value,
-            "missing_steps": getattr(result, 'missing_steps', '')
-        }
-
 
 if __name__ == '__main__':
     node_numerology_agent = NodeAgentLoader("/home/clara/manhhd/lumir-agent/config/agent_node/numerogy_v2.json")
