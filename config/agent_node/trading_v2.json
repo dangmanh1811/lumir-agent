@@ -13,10 +13,7 @@
             "failed_keywords": "không liên quan giao dịch, thiếu dữ liệu, file không hợp lệ, ngày tháng không chính xác, thông tin rời rạc, không thể phân tích, dữ liệu lỗi, định dạng sai"
         },
         "output": {
-            "task": "Nhiệm vụ được giao cho agent, sao chép từ input",
-            "users_question": "Câu hỏi của người dùng, sao chép từ input",
             "plan": "Kế hoạch chi tiết các bước ngắn gọn chi tiết để thực hiện phân tích giao dịch",
-            "states": "Trạng thái hiện tại của task",
             "response": "Danh sách keywords quan trọng được trích xuất từ context sources: trading_data, performance_metrics, risk_analysis, symbol_analysis, time_analysis, behavioral_patterns, profit_loss, win_rate. Dưới dạng List ['str'], hãy dựa vào bảng định nghĩa và chọn ra keyword phù hợp với câu hỏi, chỉ nên chọn ra một vài keyword nhất định thôi, không nên chọn quá nhiều vào",
             "agent_responsable": "analyze_agent"
         }
@@ -28,7 +25,6 @@
             "users_question": "",
             "user_id": "",
             "task": "",
-            "status": "",
             "plan": "",
             "response": "",
             "context_sources": "",
@@ -37,10 +33,6 @@
             "failed_keywords": "dự đoán chắc chắn, đảm bảo lợi nhuận, giao dịch không rủi ro, kỳ thị thua lỗ, chỉ trích người dùng, ngôn ngữ tiêu cực, thông tin không chính xác, khuyến mãi giao dịch, khuyên mua hoặc bán cổ phiếu không liên quan tới data"
         },
         "output": {
-            "task": "Nhiệm vụ được giao cho agent, sao chép từ input",
-            "users_question": "Câu hỏi của người dùng, sao chép từ input",
-            "plan": "Kế hoạch thực hiện tư vấn dựa trên phân tích từ analyze agent",
-            "states": "Trạng thái hiện tại của task",
             "response": "Nhận định tổng hợp, đánh giá chi tiết và khuyến nghị dựa trên phân tích dữ liệu giao dịch, chia theo đoạn rõ ràng, dài khoảng 500 từ",
             "agent_responsable": "execute_agent"
         }
@@ -62,8 +54,6 @@
             "failed_keywords": "thiếu thông tin, giọng điệu nghiệp dư, tiêu cực, phá hoại, không thực tế, viển vông, không đề cập rủi ro, chất lượng thấp, chung chung"
         },
         "output": {
-            "task": "Nhiệm vụ được giao cho agent, sao chép từ input",
-            "users_question": "Câu hỏi của người dùng, sao chép từ input",
             "plan": "Kế hoạch xử lý sau khi kiểm duyệt",
             "states": "Trạng thái xử lý",
             "response": "Phản hồi sau khi kiểm duyệt, trả về response cũ nếu không có vấn đề gì",

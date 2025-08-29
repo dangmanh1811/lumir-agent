@@ -1,0 +1,24 @@
+1. checker
+	- 2 score
+	 	+ 
+		+ check tông giọng 
+		+ keyword thành công, nên nhét những từ gì, nên tránh những từ gì
+		+ keyword thất bại: xúi mua cổ phiếu, chê bai negative
+		
+
+
+plan : 1 câu hỏi : Làm thế nào dể toi cai thien trading 
+
+- b1: phan tich cau hoi của users đẻ đưa ra plan.
+
+- b2 : plan:
+
+phân tích lịch sử trade của người dùng
+đưa ra điểm mạnh diểm yếu
+đưa ra những việc gì nên duy trì , những việc gì cần tránh
+
+Requirements
+Tông giọng: Lời nói nhẹ nhàng , khuyên bảo một cách tích cực tránh làm cho tâm trạng user tiêu cực đi, cần khen những diểm mạnh của user trước
+Success keyword: Plan rõ ràng , Plan có dẫn chứng , Plan có tạo đầy đủ nội dung yêu cầu , Giọng điệu tích cực, khen người dùng làm diều đúng
+Failed keyword: CHê bài người dùng . lời lẽ tiêu cực , khuyên mua hoặc bán tên 1 cổ phiếu , đưa ra lý luận không dựa trên dữ liệu, lời lẽ thù địch, gây chia rẽ 
+
